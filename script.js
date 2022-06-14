@@ -13,7 +13,7 @@ function getGroupList() {
 }
 
 // TODO this is sending data to GCP. Check how to send to S3
-function sendAttachment(params) {
+function sendAttachment() {
     var file = document.getElementById("attachment-file").files[0];
     /* Below is the example of file object
       File {
