@@ -59,6 +59,8 @@ sample chat with core library
     <script src="https://cdn.kommunicate.io/kommunicate/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.kommunicate.io/applozic/applozic.chat-6.1.1.min.js"></script>
 
+    <script src="./constants.js"></script>
+    
     <script type="text/javascript">
         var socketConnected = false;
         var timeout;
@@ -118,18 +120,12 @@ sample chat with core library
                 }
             }
         };
-
-        var APP_ID = "3fc37404bd137c29be0f5337bad8211f2";
-
     </script>
 
     <script>
 
         var groupId;
-        var userId = 'debug4'; //Todo: replace with your userId and password
-        var password = 'debug4';
-        var botId = 'abhishek-zbkki';
-        var agentId = 'abhishek@kommunicate.io';
+        
 
         $(function () {
             Applozic.ALApiService.login(
