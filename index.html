@@ -118,7 +118,9 @@
                 file && sendAttachment(groupId, file);
                 message && sendMessage(groupId, message);
                 
+                document.getElementById('attachment-file').value = "";
                 $('#m').val('');
+                
                 return false;
             });
 
