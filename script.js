@@ -65,4 +65,30 @@ function sendReadReport(groupId) {
     });
 }
 
+
+function getLatestMessageList() {
+    Applozic.ALApiService.getMessages({
+        data: {
+            startIndex: 0,
+            mainPageSize: 60
+        },
+        success: function (response) {
+            console.log(response);
+        },
+        error: function () {}
+    });
+}
+
+function getMessageListByGroupId(groupId) {
+    Applozic.ALApiService.getMessages({
+        data: {
+            startIndex: 0,
+            groupId: groupId,
+            pageSize: 30
+        },
+        success: function (response) {
+            console.log(response);
+        },
+        error: function () {}
+    });
 }
