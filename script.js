@@ -12,7 +12,6 @@ function getGroupList() {
     })
 }
 
-// TODO this is sending data to GCP. Check how to send to S3
 function sendAttachment() {
     var file = document.getElementById("attachment-file").files[0];
     /* Below is the example of file object
@@ -25,6 +24,7 @@ function sendAttachment() {
         webkitRelativePath: ""
          }*/
     var message = {
+        "contentType": 1,
         "type": 5,
         "message": "",
         "to": userId, //optional, remove it if sending group message
@@ -32,7 +32,7 @@ function sendAttachment() {
         "metadata": {},
         "source": 1
     };
-    window.Applozic.ALApiService.sendAttachment({
+    window.Applozic.ALApiService.sendAttachmentToAWS({
         data: {
             file: file,
             messagePxy: message
@@ -103,3 +103,9 @@ function getUserDetailsByUserList(userIdList) {
         error: function () {}
     });
 }
+
+// todo
+// unsubscribe typing status
+// new group logic
+// user realtime online offline
+// read receipts
