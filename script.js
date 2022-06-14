@@ -92,3 +92,14 @@ function getMessageListByGroupId(groupId) {
         error: function () {}
     });
 }
+
+
+function getMessageListByGroupId(userIdList) {
+    Applozic.ALApiService.getUserDetail({
+        data: userIdList,
+        success: function (response) {
+            console.log(response);
+        },
+        error: function () {}
+    });
+}
