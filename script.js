@@ -53,3 +53,16 @@ function sendDeliveryReport(messageKey) {
         }
     });
 }
+
+// TODO this is not used anywhere
+function sendReadReport(groupId) {
+    Applozic.ALApiService.conversationReadUpdate({
+        data: `groupId=${groupId}`,
+        success: function (result) {
+            console.log(result);
+        },
+        error: function () {}
+    });
+}
+
+}
