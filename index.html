@@ -22,6 +22,7 @@
             'onMessageReceived': function (resp) {
                 //will trigger when you will receive a new msg
                 console.log(resp);
+                sendDeliveryReport(resp.message.key);
                 $('#messages').append($('<li>').text(resp.message.from + ": " + resp.message.message));
             },
             'onMessageSent': function (resp) {

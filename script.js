@@ -43,3 +43,13 @@ function sendAttachment() {
         error: function () {}
     });
 }
+
+
+
+function sendDeliveryReport(messageKey) {
+    Applozic.ALApiService.sendDeliveryUpdate({
+        data: {
+            key: messageKey
+        }
+    });
+}
