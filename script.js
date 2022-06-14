@@ -12,23 +12,12 @@ function getGroupList() {
     })
 }
 
-function sendAttachment() {
-    var file = document.getElementById("attachment-file").files[0];
-    /* Below is the example of file object
-      File {
-        name: "test.html",
-        lastModified: 1512376706000
-        lastModifiedDate: Mon Dec 04 2017 14: 08: 26 GMT + 0530(IST) { }
-        size: 865
-        type: "text/html"
-        webkitRelativePath: ""
-         }*/
+function sendAttachment(groupId, file) {
     var message = {
         "contentType": 1,
         "type": 5,
         "message": "",
-        "to": userId, //optional, remove it if sending group message
-        "groupId": groupId, //optional, remove it if sending 1-1 message
+        "groupId": groupId,
         "metadata": {},
         "source": 1
     };
@@ -104,8 +93,26 @@ function getUserDetailsByUserList(userIdList) {
     });
 }
 
-// todo
-// unsubscribe typing status
-// new group logic
-// user realtime online offline
-// read receipts
+function subscribeToTypingChannelByGroupId(groupId) {
+    if (socketConnected) {
+        console.log("subscribing to typing event for groupId: " + groupId);
+        window.Applozic.ALSocket.subscibeToTypingChannel(groupId);
+    }
+}
+
+function sendMessage(groupId, message){
+    Applozic.ALApiService.sendMessage({
+        data: {
+            message: {
+                "type": 5,
+                "contentType": 0,
+                "message": String(message),
+                "groupId": String(groupId),
+                "metadata": {},
+                "source": 1
+            }
+        },
+        success: function (response) { console.log(response); },
+        error: function () { }
+    });
+}

@@ -15,7 +15,7 @@
     <script src="./script.js"></script>
 
     <script type="text/javascript">
-        var socketConnected = false;
+        
         var timeout;
 
         var events = {
@@ -78,7 +78,7 @@
 
     <script>
 
-        var groupId;
+        var groupId = "73627873";
         
 
         $(function () {
@@ -90,65 +90,18 @@
                         {
                             userId: userId, //Logged in user's id, a unique identifier for user
                             password: password,//Enter password here for the userId passed above, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
-                            imageLink: '', //User's profile picture url
-                            email: '', //optional
-                            contactNumber: '', //optional, pass with internationl code eg: +13109097458
                             appVersionCode: 111,
                             applicationId: APP_ID,
                             fileUpload: "awsS3Server",
+                            authenticationTypeId: 0,
+                            chatNotificationMailSent: true,
+                            deviceType: 0
                         }
                     },
                     success: function (response) {
-                        //   console.log(response);
-                        //   var data = {};
-                        //   data.token = response.token;
-                        //   data.deviceKey = response.deviceKey;
-                        //   data.websocketUrl = response.websocketUrl;
-                        //Get your APP_ID from https://dashboard.kommunicate.io
                         //This method initializes socket connection 
                         window.Applozic.ALSocket.init(APP_ID, response, events);
-                        Applozic.ALApiService.createGroup({
-                            data:
-                            {
-                                group: {
-                                    "groupName": "Support",
-                                    //   "admin": agentId,
-                                    //   "users": [{ 'userId': 'bot', 'groupRole': 2},
-                                    //             { 'userId': botId, 'groupRole': 2},
-                                    //             { 'userId': agentId, 'groupRole': 1 }],
-                                    "type": 10,      //(required) 1:private, 2:public, 5:broadcast, 7:GroupofTwo, 10:Support Chat
-                                    "metadata": {
-                                        // "CONVERSATION_ASSIGNEE": botId,
-                                        "KM_CONVERSATION_TITLE": "Support",
-                                        // "CREATE_GROUP_MESSAGE":"",
-                                        // "REMOVE_MEMBER_MESSAGE":"",
-                                        // "ADD_MEMBER_MESSAGE":"",
-                                        // "JOIN_MEMBER_MESSAGE":"",
-                                        // "GROUP_NAME_CHANGE_MESSAGE":"",
-                                        // "GROUP_ICON_CHANGE_MESSAGE":"",
-                                        // "GROUP_LEFT_MESSAGE":"",
-                                        // "CONVERSATION_STATUS":0,
-                                        // "DELETED_GROUP_MESSAGE":"",
-                                        // "GROUP_USER_ROLE_UPDATED_MESSAGE":"",
-                                        // "GROUP_META_DATA_UPDATED_MESSAGE":"",
-                                        "HIDE": "true",
-                                        "SKIP_ROUTING": "false",
-                                        "KM_CHAT_CONTEXT": "{}"
-                                    }
-                                }
-                            }, success: function (response) {
-                                console.log("group created, groupId" + response.response.id);
-                                console.log(response);
-                                groupId = response.response.id;
-
-                                if (socketConnected) {
-                                    console.log("subscribing to typing event for groupId: " + groupId);
-                                    window.Applozic.ALSocket.subscibeToTypingChannel(groupId);
-                                }
-                            },
-                            error: function () { }
-                        });
-
+                        
                     },
                     error: function () {
 
@@ -159,22 +112,12 @@
             $('form').submit(function (e) {
                 e.preventDefault(); // prevents page reloading
                 console.log("send message");
-                Applozic.ALApiService.sendMessage({
-                    data: {
-                        message: {
-                            "type": 5,
-                            "contentType": 0,
-                            "message": $('#m').val(),
-                            "groupId": String(groupId),
-                            "metadata": {},
-                            "key": "mpfj2",
-                            "source": 1
-                        }
-                    },
-                    success: function (response) { console.log(response); },
-                    error: function () { }
-                });
-
+                var file = document.getElementById("attachment-file").files[0];
+                var message = $('#m').val();
+                
+                file && sendAttachment(groupId, file);
+                message && sendMessage(groupId, message);
+                
                 $('#m').val('');
                 return false;
             });
@@ -185,8 +128,6 @@
                 console.log("#sending typing event for userId: " + userId + ", groupId: " + groupId);
                 window.Applozic.ALSocket.sendTypingStatus("1", "1", userId, groupId);
             }, false);
-
-            //window.Applozic.ALSocket.unsubscibeToTypingChannel();
 
         });
     </script>
