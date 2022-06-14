@@ -94,7 +94,7 @@ function getMessageListByGroupId(groupId) {
 }
 
 
-function getMessageListByGroupId(userIdList) {
+function getUserDetailsByUserList(userIdList) {
     Applozic.ALApiService.getUserDetail({
         data: userIdList,
         success: function (response) {
