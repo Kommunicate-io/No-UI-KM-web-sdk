@@ -9,7 +9,11 @@
     <link rel="stylesheet" href="./styles.css">
 
     <script src="https://cdn.kommunicate.io/kommunicate/jquery-3.5.1.min.js"></script>
+
+    <!-- this need to be updated once we release a new version -->
+    <!-- subscribeToSupportChannel will not work -->
     <script src="https://cdn.kommunicate.io/applozic/applozic.chat-6.1.1.min.js"></script>
+    
 
     <script src="./constants.js"></script>
     <script src="./script.js"></script>
@@ -19,6 +23,9 @@
         var timeout;
 
         var events = {
+            'onMessage': function(resp){
+                console.log('onMessage', resp);
+            },
             'onMessageReceived': function (resp) {
                 //will trigger when you will receive a new msg
                 console.log(resp);
@@ -30,17 +37,19 @@
                 //will trigger when you will send a message 
                 $('#messages').append($('<li>').text("you: " + resp.message.message));
             },
-            'onConnectFailed': function (resp) { },
-            'onConnect': function (resp) {
+            'onConnectFailed': onConnectFailed,
+            'onInit': function(resp){
+                console.log('onInit =>', resp)
+            },
+            'onConnect': function () {
                 socketConnected = true;
                 if (groupId) {
-                    window.Applozic.ALSocket.subscibeToTypingChannel(groupId);
+                    subscribeToTypingChannel(groupId);
                 }
+                subscribeToSupportChannel();
             },
-            'onMessageDelivered': function (resp) { },
-            'onMessageRead': function (resp) {
-                // will trigger when another user chat is open and you send a msg
-            },
+            'onMessageDelivered': onMessageDelivered,
+            'onMessageRead': onMessageRead,
             'onMessageDeleted': function (resp) { },
             'onConversationDeleted': function (resp) { },
             'onUserConnect': function (resp) { },
@@ -55,9 +64,7 @@
             'onUserActivated': function (resp) { },
             'onUserDeactivated': function (resp) { },
             'connectToSocket': function (resp) { },
-            'onMessage': function (resp) {
-                //console.log(resp); //Will trigger for every   message 
-            },
+            'onUserStatusUpdate': userStatusUpdateHandler,
             'onTypingStatus': function (resp) {
                 var typingData = resp.body.split(",");
                 if (typingData[2] == "1") {
@@ -78,14 +85,14 @@
 
     <script>
 
-        var groupId = "73627873";
+        var groupId = "73660380";
         
 
         $(function () {
             Applozic.ALApiService.login(
                 {
                     data: {
-                        baseUrl: 'https://chat.kommunicate.io',
+                        baseUrl: KM_BASE_URL,
                         alUser:
                         {
                             userId: userId, //Logged in user's id, a unique identifier for user
@@ -95,13 +102,13 @@
                             fileUpload: "awsS3Server",
                             authenticationTypeId: 0,
                             chatNotificationMailSent: true,
-                            deviceType: 0
+                            deviceType: 0,
+                            enableEncryption: true
                         }
                     },
                     success: function (response) {
                         //This method initializes socket connection 
-                        window.Applozic.ALSocket.init(APP_ID, response, events);
-                        
+                        init_KM(APP_ID, response, events);
                     },
                     error: function () {
 
@@ -120,7 +127,7 @@
                 
                 document.getElementById('attachment-file').value = "";
                 $('#m').val('');
-                
+
                 return false;
             });
 
@@ -128,8 +135,18 @@
             //Typing indicator
             document.getElementById("m").addEventListener("keyup", function () {
                 console.log("#sending typing event for userId: " + userId + ", groupId: " + groupId);
-                window.Applozic.ALSocket.sendTypingStatus("1", "1", userId, groupId);
+                sendTypingStatus("1", "1", userId, groupId);
             }, false);
+
+            let changeStatusBtn = document.querySelector('#update-agent-status')
+            
+            changeStatusBtn.addEventListener('click', () => {
+                let currStatus = changeStatusBtn.getAttribute('data-status');
+                currStatus = Number(currStatus)
+                updateAgentStatus(currStatus ^ 1);
+                changeStatusBtn.setAttribute('data-status', currStatus ^ 1);
+                changeStatusBtn.innerText = !!currStatus ? "Go Online" : "Go Offline";
+            })
 
         });
     </script>
@@ -144,8 +161,11 @@
 
         <div style="display: flex;margin-right: 40px;">
             <input type="file" id="attachment-file" name="attachment-file" style="width: 40%;">
-
-            <button>Send</button>
+            <button type="submit">Send</button>
+            &nbsp;
+            <button type="button" id="update-agent-status" data-status="0">
+                Go Online
+            </button>
         </div>
         
     </form>
