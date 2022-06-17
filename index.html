@@ -44,7 +44,7 @@
             'onConnect': function () {
                 socketConnected = true;
                 if (groupId) {
-                    subscribeToTypingChannel(groupId);
+                    subscribeToTypingChannelByGroupId(groupId);
                 }
                 subscribeToSupportChannel();
             },
@@ -108,7 +108,7 @@
                     },
                     success: function (response) {
                         //This method initializes socket connection 
-                        init_KM(APP_ID, response, events);
+                        init_km(APP_ID, response, events);
                     },
                     error: function () {
 

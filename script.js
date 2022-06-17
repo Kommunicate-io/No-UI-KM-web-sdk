@@ -1,4 +1,4 @@
-function init_KM(appId, response, events){
+function init_km(appId, response, events){
     window.Applozic.ALSocket.init(appId, response, events);
 }
 function getGroupList() {
@@ -123,6 +123,12 @@ function subscribeToTypingChannelByGroupId(groupId) {
     }
 }
 
+// TODO this is not used anywhere
+function unsubscribeToTypingChannel(){
+    window.Applozic.ALSocket.unsubscibeToTypingChannel();
+}
+
+
 function sendMessage(groupId, message){
     Applozic.ALApiService.sendMessage({
         data: {
@@ -142,36 +148,35 @@ function sendMessage(groupId, message){
 
 
 function onConnectFailed(resp) {
+    socketConnected = false;
     console.log("onConnectFailed triggered");
     if (navigator.onLine) {
         console.log("reconnecting");
         window.Applozic.ALSocket.reconnect();
     }
 }
-function subscribeToTypingChannel(groupId){
-    window.Applozic.ALSocket.subscibeToTypingChannel(groupId);
-}
-
-function unsubscribeToTypingChannel(){
-    window.Applozic.ALSocket.unsubscibeToTypingChannel();
-}
 
 function subscribeToSupportChannel(){
     window.Applozic.ALSocket.subscribeToSupportChannel();
 }
+
+// TODO this is not used anywhere
 function unsubscribeToSupportChannel(){
     window.Applozic.ALSocket.unsubscribeToSupportChannel();
 }
-// anybody, (agent/user) when goes online, offline, or away, this will get triggered.
-//  KM_USER_STATUS: {
+
+
+function userStatusUpdateHandler(resp){
+    // anybody, (agent/user) when goes online, offline, or away, this will get triggered.
+    // KM_USER_STATUS: {
     //     OFFLINE: 0,
     //     ONLINE: 1,
     //     AWAY: 2,
     //     NOT_AWAY: 3,
-    // 
-// },
-function userStatusUpdateHandler(resp){
+    // }
+
     console.log('onUserStatusUpdate', JSON.parse(resp.body)["message"]);
+    // the format of message is {username, status, timestamp};
 }
 
 function updateAgentStatus(statusId){
@@ -186,23 +191,4 @@ function onMessageRead (resp) {
 function onMessageDelivered (resp) {
     // will trigger when the sent message gets delivered
     console.log('message read', resp)
-}
-
-
-// added event handlers for events which are not configured
-function onMessageHandler(message){
-    let messageType = message.type;
-    console.log(message);
-    let MESSAGE_TYPE_ACTION_MAP = {
-        "APPLOZIC_25": function(message){
-            // user online offline status changed
-            console.log('here');
-            console.log(message);
-        },
-    }
-
-    let action  = MESSAGE_TYPE_ACTION_MAP[messageType];
-    if(!action) return;
-    console.log(messageType);
-    action(message);
 }
