@@ -33,8 +33,8 @@
             'onConnectFailed': function (resp) { },
             'onConnect': function (resp) {
                 socketConnected = true;
-                if (groupId) {
-                    window.Applozic.ALSocket.subscibeToTypingChannel(groupId);
+                if (currGroupId) {
+                    window.Applozic.ALSocket.subscibeToTypingChannel(currGroupId);
                 }
             },
             'onMessageDelivered': function (resp) { },
@@ -78,9 +78,8 @@
 
     <script>
 
-        var groupId = "73627873";
-        
-
+        var currGroupId = "";
+    
         $(function () {
             Applozic.ALApiService.login(
                 {
@@ -115,8 +114,8 @@
                 var file = document.getElementById("attachment-file").files[0];
                 var message = $('#m').val();
                 
-                file && sendAttachment(groupId, file);
-                message && sendMessage(groupId, message);
+                file && sendAttachment(currGroupId, file);
+                message && sendMessage(currGroupId, message);
                 
                 document.getElementById('attachment-file').value = "";
                 $('#m').val('');
@@ -127,8 +126,8 @@
 
             //Typing indicator
             document.getElementById("m").addEventListener("keyup", function () {
-                console.log("#sending typing event for userId: " + userId + ", groupId: " + groupId);
-                window.Applozic.ALSocket.sendTypingStatus("1", "1", userId, groupId);
+                console.log("#sending typing event for userId: " + userId + ", groupId: " + currGroupId);
+                window.Applozic.ALSocket.sendTypingStatus("1", "1", userId, currGroupId);
             }, false);
 
         });

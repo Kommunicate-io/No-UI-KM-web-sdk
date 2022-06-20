@@ -116,3 +116,36 @@ function sendMessage(groupId, message){
         error: function () { }
     });
 }
+
+// Not used anywhere in example
+// Use this at client side only (i.e. on customers end)
+function createGroup({success, error}){
+    Applozic.ALApiService.createGroup({
+        data:
+        {
+            group: {
+                "groupName": "Support",
+                "type": 10,      
+                "metadata": {
+                    "KM_CONVERSATION_TITLE": "Support",
+                    "HIDE": "true",
+                    "SKIP_ROUTING": "false",
+                    "KM_CHAT_CONTEXT": "{}"
+                }
+            }
+        }, success: function (response) {
+            console.log("group created, groupId" + response.response.id);
+            console.log(response);
+            currGroupId = response.response.id;
+
+            if (socketConnected) {
+                console.log("subscribing to typing event for groupId: " + currGroupId);
+                window.Applozic.ALSocket.subscibeToTypingChannel(currGroupId);
+            }
+            success && success(response);
+        },
+        error: function () {
+            
+        }
+    });
+}

@@ -1,7 +1,7 @@
-var APP_ID = "357f8b08576273bf8881133155bfc5568";
-
-var userId = 'debug4'; //Todo: replace with your agent id and password
-var password = 'debug4';
+var APP_ID = ""; // use you app id
+// Todo: replace with your agent id and password for CMS. 
+// replace with customer id in case of client side.
+var userId = ''; 
+var password = '';
 var socketConnected = false;
-// var botId = 'df-bot-sbefo';
-// var agentId = 'shantnu+18apr2021@kommunicate.io';
+
