@@ -176,6 +176,7 @@ function createGroup({success, error}){
             
         }
     });
+}
 
 function onConnectFailed(resp) {
     // TODO: check again after 30s.
