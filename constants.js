@@ -4,4 +4,4 @@ var APP_ID = ""; // use you app id
 var userId = ''; 
 var password = '';
 var socketConnected = false;
-
+var KM_BASE_URL = "https://chat.kommunicate.io"
