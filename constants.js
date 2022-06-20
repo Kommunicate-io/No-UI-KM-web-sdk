@@ -1,7 +1,9 @@
-var APP_ID = "357f8b08576273bf8881133155bfc5568";
+var APP_ID = 'Enter your app id';
+var userId = ''; //Todo: replace with your agent id and password
+var password = '';
 
-var userId = 'debug4'; //Todo: replace with your agent id and password
-var password = 'debug4';
+
 var socketConnected = false;
+var KM_BASE_URL = "https://chat.kommunicate.io"
+
 // var botId = 'df-bot-sbefo';
-// var agentId = 'shantnu+18apr2021@kommunicate.io';
