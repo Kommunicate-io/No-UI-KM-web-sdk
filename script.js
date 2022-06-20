@@ -54,7 +54,6 @@ function getURLFromBlobKey(blobKey, callback) {
     })
 };
 
-
 function sendDeliveryReport(messageKey) {
     Applozic.ALApiService.sendDeliveryUpdate({
         data: {

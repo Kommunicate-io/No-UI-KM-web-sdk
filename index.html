@@ -137,17 +137,6 @@
                 console.log("#sending typing event for userId: " + userId + ", groupId: " + groupId);
                 sendTypingStatus("1", "1", userId, groupId);
             }, false);
-
-            let changeStatusBtn = document.querySelector('#update-agent-status')
-            
-            changeStatusBtn.addEventListener('click', () => {
-                let currStatus = changeStatusBtn.getAttribute('data-status');
-                currStatus = Number(currStatus)
-                updateAgentStatus(currStatus ^ 1);
-                changeStatusBtn.setAttribute('data-status', currStatus ^ 1);
-                changeStatusBtn.innerText = !!currStatus ? "Go Online" : "Go Offline";
-            })
-
         });
     </script>
 
@@ -162,10 +151,6 @@
         <div style="display: flex;margin-right: 40px;">
             <input type="file" id="attachment-file" name="attachment-file" style="width: 40%;">
             <button type="submit">Send</button>
-            &nbsp;
-            <button type="button" id="update-agent-status" data-status="0">
-                Go Online
-            </button>
         </div>
         
     </form>
