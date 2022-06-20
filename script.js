@@ -147,6 +147,7 @@ function sendMessage(groupId, message){
 
 
 function onConnectFailed(resp) {
+    // TODO: check again after 30s.
     socketConnected = false;
     console.log("onConnectFailed triggered");
     if (navigator.onLine) {
@@ -176,10 +177,6 @@ function userStatusUpdateHandler(resp){
 
     console.log('onUserStatusUpdate', JSON.parse(resp.body)["message"]);
     // the format of message is {username, status, timestamp};
-}
-
-function updateAgentStatus(statusId){
-    Applozic.ALSocket.sendStatus(statusId)
 }
 
 // you can identify the messages with help of message keys
