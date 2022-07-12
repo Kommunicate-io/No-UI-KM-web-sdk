@@ -62,7 +62,6 @@ function sendDeliveryReport(messageKey) {
     });
 }
 
-// TODO this is not used anywhere
 function sendReadReport(groupId) {
     Applozic.ALApiService.conversationReadUpdate({
         data: `groupId=${groupId}`,
@@ -197,6 +196,32 @@ function unsubscribeToSupportChannel(){
     window.Applozic.ALSocket.unsubscribeToSupportChannel();
 }
 
+// you can identify the messages with help of message keys
+function onMessageRead (resp) {
+    // will trigger when the end user reads the message sent by you
+    console.log('message read', resp)
+}
+function onMessageDelivered (resp) {
+    // will trigger when the sent message gets delivered
+    console.log('message read', resp)
+}
+
+function onMessageReceivedHandler(resp) {
+    //will trigger when you will receive a new msg
+    console.log("onMessageReceived",resp);
+    if(currGroupId == resp.message.to){
+        sendReadReport(currGroupId);
+        sendDeliveryReport(resp.message.key);
+        $('#messages').append($('<li>').text(resp.message.from + ": " + resp.message.message));
+    }else{
+        $('#messages').append($('<li>').text("New message received in group " + resp.message.to));
+    }
+}
+function onMessageSentHandler(resp) {
+    console.log("onMessageSent",resp);
+    //will trigger when you will send a message 
+    $('#messages').append($('<li>').text("you: " + resp.message.message));
+}
 
 function userStatusUpdateHandler(resp){
     // anybody, (agent/user) when goes online, offline, or away, this will get triggered.
@@ -209,14 +234,4 @@ function userStatusUpdateHandler(resp){
 
     console.log('onUserStatusUpdate', JSON.parse(resp.body)["message"]);
     // the format of message is {username, status, timestamp};
-}
-
-// you can identify the messages with help of message keys
-function onMessageRead (resp) {
-    // will trigger when the end user reads the message sent by you
-    console.log('message read', resp)
-}
-function onMessageDelivered (resp) {
-    // will trigger when the sent message gets delivered
-    console.log('message read', resp)
 }

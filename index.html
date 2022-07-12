@@ -10,9 +10,8 @@
 
     <script src="https://cdn.kommunicate.io/kommunicate/jquery-3.5.1.min.js"></script>
 
-    <!-- this need to be updated once we release a new version -->
-    <!-- subscribeToSupportChannel will not work -->
-    <script src="https://cdn.kommunicate.io/applozic/applozic.chat-6.1.1.min.js"></script>
+    <!-- subscribeToSupportChannel will work in 6.1.2 -->
+    <script src="https://cdn.kommunicate.io/applozic/applozic.chat-6.1.2.min.js"></script>
     
 
     <script src="./constants.js"></script>
@@ -23,20 +22,9 @@
         var timeout;
 
         var events = {
-            'onMessage': function(resp){
-                console.log('onMessage', resp);
-            },
-            'onMessageReceived': function (resp) {
-                //will trigger when you will receive a new msg
-                console.log(resp);
-                sendDeliveryReport(resp.message.key);
-                $('#messages').append($('<li>').text(resp.message.from + ": " + resp.message.message));
-            },
-            'onMessageSent': function (resp) {
-                console.log(resp);
-                //will trigger when you will send a message 
-                $('#messages').append($('<li>').text("you: " + resp.message.message));
-            },
+            // 'onMessage': onMessageHandler,
+            'onMessageReceived': onMessageReceivedHandler,
+            'onMessageSent': onMessageSentHandler,
             'onConnectFailed': onConnectFailed,
             'onInit': function(resp){
                 console.log('onInit =>', resp)
@@ -46,7 +34,7 @@
                 if (currGroupId) {
                     subscribeToTypingChannelByGroupId(currGroupId);
                 }
-                // subscribeToSupportChannel();
+                subscribeToSupportChannel();
             },
             'onMessageDelivered': onMessageDelivered,
             'onMessageRead': onMessageRead,
